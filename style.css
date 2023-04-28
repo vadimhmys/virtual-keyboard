@@ -5,3 +5,13 @@
     font-size: 30px;
     color: #180947;
 }
+
+.textarea {
+    display: block;
+    width: 700px;
+    height: 200px;
+    margin: 0 auto;
+    padding: 15px;
+    color: #444;
+    font-size: 18px;
+}

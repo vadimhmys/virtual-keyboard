@@ -5,8 +5,15 @@ function renderTitle() {
   document.body.append(title);
 }
 
+function renderTextArea() {
+  const textarea = document.createElement('textarea');
+  textarea.className = 'textarea';
+  document.body.append(textarea);
+}
+
 function init() {
   renderTitle();
+  renderTextArea();
 }
 
 init();
