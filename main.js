@@ -161,11 +161,19 @@ function renderKeys(language, classOfSpan) {
   }
 }
 
+function renderDescription(text) {
+  const p = document.createElement('p');
+  p.className = 'description';
+  p.textContent = text;
+  document.body.append(p);
+}
+
 function init() {
   renderTitle();
   renderTextArea();
   renderKeyboard();
   renderKeys(currentLanguage, currentSpanClass);
+  renderDescription('Клавиатура создана в операционной системе Windows');
 }
 
 init();

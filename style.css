@@ -108,3 +108,9 @@
 .keyboard .Space {
 	width:330px
 }
+
+.description {
+	margin: 10px auto;
+	text-align: center;
+    font-family: "Trebuchet MS", "Helvetica", sans-serif;
+}
