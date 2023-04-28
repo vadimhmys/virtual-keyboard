@@ -105,7 +105,8 @@
 	width: 330px;
 }
 
-.description {
+.description,
+.language {
 	margin: 10px auto;
 	text-align: center;
     font-family: "Trebuchet MS", "Helvetica", sans-serif;

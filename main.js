@@ -168,12 +168,20 @@ function renderDescription(text) {
   document.body.append(p);
 }
 
+function renderLanguageSwitchInstructions(text) {
+  const p = document.createElement('p');
+  p.className = 'language';
+  p.textContent = text;
+  document.body.append(p);
+}
+
 function init() {
   renderTitle();
   renderTextArea();
   renderKeyboard();
   renderKeys(currentLanguage, currentSpanClass);
   renderDescription('Клавиатура создана в операционной системе Windows');
+  renderLanguageSwitchInstructions('Для переключения языка комбинация: левые Shift + Alt');
 }
 
 init();
