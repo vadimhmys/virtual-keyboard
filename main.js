@@ -26,7 +26,7 @@ function getCursorPosition(text) {
   return cursorPos;
 }
 
-function removeCharBefore() {
+function removeCharBeforeCursor() {
   const textarea = document.querySelector('textarea');
   let { value } = textarea;
   if (value === '') return;
@@ -45,9 +45,9 @@ function prepareVirtualKeyboard() {
       printChar(targetClass);
     } else {
       switch (targetClass) {
-        case 'Backspace': removeCharBefore();
+        case 'Backspace': removeCharBeforeCursor();
           break;
-        default: removeCharBefore();
+        default: removeCharBeforeCursor();
       }
     }
     return undefined;
