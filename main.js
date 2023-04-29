@@ -13,11 +13,25 @@ function printChar(targetClass) {
   textarea.value += char;
 }
 
+function getCursorPosition(text) {
+  let cursorPos = 0;
+  if (document.selection) {
+    text.focus();
+    const sel = document.selection.createRange();
+    sel.moveStart('character', -text.value.length);
+    cursorPos = sel.text.length;
+  } else if (text.selectionStart || text.selectionStart === '0') {
+    cursorPos = text.selectionStart;
+  }
+  return cursorPos;
+}
+
 function removeCharBefore() {
   const textarea = document.querySelector('textarea');
   let { value } = textarea;
   if (value === '') return;
-  value = value.slice(0, value.length - 1);
+  const cursorPos = getCursorPosition(textarea);
+  value = value.replace(value[cursorPos], '');
   textarea.value = value;
 }
 
