@@ -54,6 +54,13 @@ function removeCharAfterCursor() {
   textarea.value = value.slice(0, cursorPos) + value.slice(cursorPos + 1);
 }
 
+function moveLine() {
+  const { value } = textarea;
+  const n = '\n';
+  textarea.value = value.slice(0, cursorPos) + n + value.slice(cursorPos);
+  cursorPos += 1;
+}
+
 function prepareVirtualKeyboard() {
   const keyboard = document.querySelector('.keyboard');
   keyboard.addEventListener('click', (e) => {
@@ -67,6 +74,8 @@ function prepareVirtualKeyboard() {
         case 'Backspace': removeCharBeforeCursor();
           break;
         case 'Delete': removeCharAfterCursor();
+          break;
+        case 'Enter': moveLine();
           break;
         default: removeCharBeforeCursor();
       }
