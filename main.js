@@ -86,7 +86,7 @@ function prepareVirtualKeyboard() {
           break;
         case 'Tab': addTab();
           break;
-        default: removeCharBeforeCursor();
+        default: return 0;
       }
     }
     return undefined;
