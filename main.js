@@ -61,6 +61,13 @@ function moveLine() {
   cursorPos += 1;
 }
 
+function addTab() {
+  const { value } = textarea;
+  const tab = '    ';
+  textarea.value = value.slice(0, cursorPos) + tab + value.slice(cursorPos);
+  cursorPos += 4;
+}
+
 function prepareVirtualKeyboard() {
   const keyboard = document.querySelector('.keyboard');
   keyboard.addEventListener('click', (e) => {
@@ -76,6 +83,8 @@ function prepareVirtualKeyboard() {
         case 'Delete': removeCharAfterCursor();
           break;
         case 'Enter': moveLine();
+          break;
+        case 'Tab': addTab();
           break;
         default: removeCharBeforeCursor();
       }
