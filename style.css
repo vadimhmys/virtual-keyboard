@@ -46,11 +46,16 @@
     border-radius: 3px;
     cursor: pointer;
     user-select: none;
-    transition: border-radius 0.3s, background-color 0.3s;
+    transition: border-radius .4s, background-color .4s;
 }
 
 .keyboard .key:hover {
-    background:#79aa89;
+    background: #9056c0;;
+}
+
+.keyboard .key:active {
+	background-color:#7c20c7;
+	border-radius:50px
 }
 
 .caseDown,
