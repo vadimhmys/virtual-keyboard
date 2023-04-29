@@ -1,52 +1,64 @@
 /* eslint-disable import/extensions */
 import { init } from './Init.js';
 
+init();
+
 const funcKeys = [
   'Backspace', 'Tab', 'Delete', 'CapsLock', 'Enter', 'ShiftLeft', 'ShiftRight',
   'ControlLeft', 'MetaLeft', 'AltLeft', 'AltRight', 'ControlRight',
 ];
 
+let cursorPos = 0;
+const textarea = document.querySelector('textarea');
+let textareaFocusState = false;
+
+textarea.addEventListener('click', () => {
+  setTimeout(() => {
+    cursorPos = textarea.selectionEnd;
+  }, 100);
+});
+
+textarea.addEventListener('focus', () => {
+  textareaFocusState = true;
+  textarea.selectionStart = cursorPos;
+  textarea.selectionEnd = cursorPos;
+  textarea.classList.add('focused');
+});
+
+document.addEventListener('click', (e) => {
+  if ((e.target.closest('.key') || e.target.closest('textarea'))) {
+    if (textareaFocusState) textarea.focus();
+  } else {
+    textareaFocusState = false;
+    textarea.classList.remove('focused');
+  }
+});
+
 function printChar(targetClass) {
-  const textarea = document.querySelector('textarea');
   const key = document.querySelector(`.${targetClass}`);
   const char = key.textContent;
-  textarea.value += char;
-}
-
-function getCursorPosition(text) {
-  let cursorPos = 0;
-  if (document.selection) {
-    text.focus();
-    const sel = document.selection.createRange();
-    sel.moveStart('character', -text.value.length);
-    cursorPos = sel.text.length;
-  } else if (text.selectionStart || text.selectionStart === '0') {
-    cursorPos = text.selectionStart;
-  }
-  return cursorPos;
+  const { value } = textarea;
+  textarea.value = value.slice(0, cursorPos) + char + value.slice(cursorPos);
+  cursorPos += 1;
 }
 
 function removeCharBeforeCursor() {
-  const textarea = document.querySelector('textarea');
-  let { value } = textarea;
-  if (value === '') return;
-  const cursorPos = getCursorPosition(textarea);
-  value = value.replace(value[cursorPos], '');
-  textarea.value = value;
+  const { value } = textarea;
+  textarea.value = value.substring(0, cursorPos - 1) + value.substring(cursorPos);
+  cursorPos -= 1;
+  if (cursorPos < 0) { cursorPos = 0; }
 }
 
 function removeCharAfterCursor() {
-  const textarea = document.querySelector('textarea');
   let { value } = textarea;
   if (value === '') return;
-  const cursorPos = getCursorPosition(textarea);
   value = value.replace(value[cursorPos + 1], '');
   textarea.value = value;
 }
 
 function prepareVirtualKeyboard() {
   const keyboard = document.querySelector('.keyboard');
-  keyboard.addEventListener('mousedown', (e) => {
+  keyboard.addEventListener('click', (e) => {
     const target = e.target.closest('.key');
     if (!target) return undefined;
     const targetClass = target.getAttribute('class').split(' ')[1];
@@ -65,5 +77,4 @@ function prepareVirtualKeyboard() {
   });
 }
 
-init();
 prepareVirtualKeyboard();

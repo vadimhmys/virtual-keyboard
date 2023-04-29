@@ -115,3 +115,9 @@
 .hidden {
     display: none;
 }
+
+.focused {
+    border: 2px solid #000;
+    outline: none;
+    height: 198px;
+}
