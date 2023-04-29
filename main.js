@@ -50,10 +50,8 @@ function removeCharBeforeCursor() {
 }
 
 function removeCharAfterCursor() {
-  let { value } = textarea;
-  if (value === '') return;
-  value = value.replace(value[cursorPos + 1], '');
-  textarea.value = value;
+  const { value } = textarea;
+  textarea.value = value.slice(0, cursorPos) + value.slice(cursorPos + 1);
 }
 
 function prepareVirtualKeyboard() {
