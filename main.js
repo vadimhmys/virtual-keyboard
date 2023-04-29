@@ -35,6 +35,15 @@ function removeCharBeforeCursor() {
   textarea.value = value;
 }
 
+function removeCharAfterCursor() {
+  const textarea = document.querySelector('textarea');
+  let { value } = textarea;
+  if (value === '') return;
+  const cursorPos = getCursorPosition(textarea);
+  value = value.replace(value[cursorPos + 1], '');
+  textarea.value = value;
+}
+
 function prepareVirtualKeyboard() {
   const keyboard = document.querySelector('.keyboard');
   keyboard.addEventListener('mousedown', (e) => {
@@ -46,6 +55,8 @@ function prepareVirtualKeyboard() {
     } else {
       switch (targetClass) {
         case 'Backspace': removeCharBeforeCursor();
+          break;
+        case 'Delete': removeCharAfterCursor();
           break;
         default: removeCharBeforeCursor();
       }
