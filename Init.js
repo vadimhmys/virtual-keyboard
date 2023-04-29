@@ -75,9 +75,6 @@ const charSets = {
   ],
 };
 
-const currentLanguage = 'eng';
-const currentSpanClass = 'caseDown';
-
 function renderTitle() {
   const title = document.createElement('h1');
   title.textContent = 'RSS Виртуальная клавиатура';
@@ -153,7 +150,7 @@ function renderKeyboard() {
   document.body.append(keybord);
 }
 
-function renderKeys(language, classOfSpan) {
+export function renderKeys(language, classOfSpan) {
   const charArrayName = `${language}${classOfSpan[0].toUpperCase()}${classOfSpan.slice(1)}Chars`;
   const spanCollection = document.querySelectorAll(`span[class='${classOfSpan}']`);
   for (let i = 0; i < spanCollection.length; i += 1) {
@@ -175,13 +172,11 @@ function renderLanguageSwitchInstructions(text) {
   document.body.append(p);
 }
 
-function init() {
+export function init() {
   renderTitle();
   renderTextArea();
   renderKeyboard();
-  renderKeys(currentLanguage, currentSpanClass);
+  renderKeys('eng', 'caseDown');
   renderDescription('Клавиатура создана в операционной системе Windows');
   renderLanguageSwitchInstructions('Для переключения языка комбинация: левые Shift + Alt');
 }
-
-export default init;
