@@ -75,6 +75,9 @@ const charSets = {
   ],
 };
 
+export const currentLanguage = 'eng';
+export const currentKeyClass = 'caseDown';
+
 function renderTitle() {
   const title = document.createElement('h1');
   title.textContent = 'RSS Виртуальная клавиатура';
@@ -131,10 +134,7 @@ function renderKeyboard() {
       const engSpan = document.createElement('span');
       engSpan.classList.add('eng');
 
-      const caseDownSpanClone = caseDownSpan.cloneNode();
-      caseDownSpanClone.classList.remove('hidden');
-
-      engSpan.append(caseDownSpanClone);
+      engSpan.append(caseDownSpan.cloneNode());
       engSpan.append(caseUpSpan.cloneNode());
       engSpan.append(capsSpan.cloneNode());
       engSpan.append(shiftCapsSpan.cloneNode());
@@ -152,9 +152,16 @@ function renderKeyboard() {
 
 export function renderKeys(language, classOfSpan) {
   const charArrayName = `${language}${classOfSpan[0].toUpperCase()}${classOfSpan.slice(1)}Chars`;
-  const spanCollection = document.querySelectorAll(`span[class='${classOfSpan}']`);
+  const spanCollection = document.querySelectorAll(`span.${language} > span.${classOfSpan}`);
   for (let i = 0; i < spanCollection.length; i += 1) {
     spanCollection[i].textContent = charSets[charArrayName][i];
+  }
+}
+
+function showKeys() {
+  const visibleKeys = document.querySelectorAll(`span.${currentLanguage} > span.${currentKeyClass}`);
+  for (let i = 0; i < visibleKeys.length; i += 1) {
+    visibleKeys[i].classList.remove('hidden');
   }
 }
 
@@ -177,6 +184,14 @@ export function init() {
   renderTextArea();
   renderKeyboard();
   renderKeys('eng', 'caseDown');
+  renderKeys('eng', 'caseUp');
+  renderKeys('eng', 'caps');
+  renderKeys('eng', 'shiftCaps');
+  renderKeys('rus', 'caseDown');
+  renderKeys('rus', 'caseUp');
+  renderKeys('rus', 'caps');
+  renderKeys('rus', 'shiftCaps');
+  showKeys();
   renderDescription('Клавиатура создана в операционной системе Windows');
   renderLanguageSwitchInstructions('Для переключения языка комбинация: левые Shift + Alt');
 }
