@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
 import { currentLanguage, currentKeyClass } from './Init.js';
+import runPhysicalKeyboard from './PhysicalModel.js';
 
 function runVirtualKeyboard() {
   const funcKeys = [
@@ -184,6 +185,7 @@ function runVirtualKeyboard() {
   }
 
   prepareVirtualKeyboard();
+  runPhysicalKeyboard();
 }
 
 export default runVirtualKeyboard;
