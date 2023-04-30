@@ -127,14 +127,11 @@ function changeCharactersByPressShift() {
     }
     visibleSpans[i].classList.remove('hidden');
   }
-
-  prevKeyClass = curKeyClass;
-  curKeyClass = 'shiftCaps';
 }
 
 function changeCharactersByReleaseShift() {
   const hiddenSpans = document.querySelectorAll('span.shiftCaps');
-  const visibleSpans = document.querySelectorAll(`span.${prevKeyClass}`);
+  const visibleSpans = document.querySelectorAll(`span.${curKeyClass}`);
 
   for (let i = 0; i < hiddenSpans.length; i += 1) {
     hiddenSpans[i].classList.add('hidden');
@@ -151,9 +148,6 @@ function changeCharactersByReleaseShift() {
     }
     visibleSpans[i].classList.remove('hidden');
   }
-
-  curKeyClass = prevKeyClass;
-  prevKeyClass = 'shiftCaps';
 }
 
 function prepareVirtualKeyboard() {
