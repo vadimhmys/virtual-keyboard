@@ -53,8 +53,8 @@
     background: #9056c0;;
 }
 
-.keyboard .key:active,
-.keyboard .key.active {
+.keyboard .key.active,
+.keyboard .key.activeCL {
 	background-color:#7c20c7;
 	border-radius:50px
 }

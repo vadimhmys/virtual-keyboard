@@ -2,7 +2,13 @@
 import { arrayOfAllCodes } from './Init.js';
 
 function runPhysicalKeyboard() {
-  return arrayOfAllCodes;
+  document.addEventListener('keydown', (e) => {
+    if (arrayOfAllCodes.includes(e.code)) {
+      const key = document.querySelector(`.${e.code}`);
+      const generatedEvent = new MouseEvent('click', { bubbles: true, cancelable: true, composed: true });
+      key.dispatchEvent(generatedEvent);
+    }
+  });
 }
 
 export default runPhysicalKeyboard;

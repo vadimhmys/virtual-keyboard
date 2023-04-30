@@ -37,7 +37,14 @@ function runVirtualKeyboard() {
     }
   });
 
+  function highlightPressedKey(someClass) {
+    const div = document.querySelector(`.${someClass}`);
+    div.classList.add('active');
+    setTimeout(() => div.classList.remove('active'), 100);
+  }
+
   function printChar(targetClass) {
+    highlightPressedKey(targetClass);
     const key = document.querySelector(`.${targetClass} span.${currentLanguage} span.${curKeyClass}`);
     const char = key.textContent;
     const { value } = textarea;
@@ -74,7 +81,7 @@ function runVirtualKeyboard() {
     countPressCL += 1;
     const keyCL = document.querySelector('.CapsLock');
     if (countPressCL % 2 !== 0) {
-      keyCL.classList.add('active');
+      keyCL.classList.add('activeCL');
       const hiddenSpans = document.querySelectorAll(`span.${curKeyClass}`);
       const visibleSpans = document.querySelectorAll('.caps');
 
@@ -88,7 +95,7 @@ function runVirtualKeyboard() {
       prevKeyClass = curKeyClass;
       curKeyClass = 'caps';
     } else {
-      keyCL.classList.remove('active');
+      keyCL.classList.remove('activeCL');
       const visibleClass = (curKeyClass === 'caps') ? prevKeyClass : curKeyClass;
       const hiddenSpans = document.querySelectorAll('.caps');
       const visibleSpans = document.querySelectorAll(`.${visibleClass}`);
@@ -149,34 +156,37 @@ function runVirtualKeyboard() {
     }
   }
 
+  function makeKeysActive(event) {
+    const target = event.target.closest('.key');
+    if (!target) return undefined;
+    const targetClass = target.getAttribute('class').split(' ')[1];
+    if (!funcKeys.includes(targetClass)) {
+      printChar(targetClass);
+    } else {
+      highlightPressedKey(targetClass);
+      switch (targetClass) {
+        case 'Backspace': removeCharBeforeCursor();
+          break;
+        case 'Delete': removeCharAfterCursor();
+          break;
+        case 'Enter': moveLine();
+          break;
+        case 'Tab': addTab();
+          break;
+        case 'CapsLock': changeCharactersByPressCapsLock();
+          break;
+        default: return 0;
+      }
+    }
+    return undefined;
+  }
+
   function prepareVirtualKeyboard() {
     const keyboard = document.querySelector('.keyboard');
     const keyShiftLeft = document.querySelector('.ShiftLeft');
     const keyShiftRight = document.querySelector('.ShiftRight');
 
-    keyboard.addEventListener('click', (e) => {
-      const target = e.target.closest('.key');
-      if (!target) return undefined;
-      const targetClass = target.getAttribute('class').split(' ')[1];
-      if (!funcKeys.includes(targetClass)) {
-        printChar(targetClass);
-      } else {
-        switch (targetClass) {
-          case 'Backspace': removeCharBeforeCursor();
-            break;
-          case 'Delete': removeCharAfterCursor();
-            break;
-          case 'Enter': moveLine();
-            break;
-          case 'Tab': addTab();
-            break;
-          case 'CapsLock': changeCharactersByPressCapsLock();
-            break;
-          default: return 0;
-        }
-      }
-      return undefined;
-    });
+    keyboard.addEventListener('click', makeKeysActive);
 
     keyShiftLeft.addEventListener('mousedown', changeCharactersByPressShift);
     keyShiftRight.addEventListener('mousedown', changeCharactersByPressShift);
