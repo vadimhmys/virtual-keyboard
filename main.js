@@ -13,6 +13,7 @@ const textarea = document.querySelector('textarea');
 let textareaFocusState = false;
 let curKeyClass = currentKeyClass;
 let prevKeyClass;
+let countPressCL = 0;
 
 textarea.addEventListener('click', () => {
   setTimeout(() => {
@@ -70,34 +71,88 @@ function addTab() {
   cursorPos += 4;
 }
 
-function convertCharactersToUppercase() {
+function changeCharactersByPressCapsLock() {
+  countPressCL += 1;
   const keyCL = document.querySelector('.CapsLock');
-  keyCL.classList.toggle('active');
-  const currentSpans = document.querySelectorAll(`span.${currentKeyClass}`);
-  const capsSpans = document.querySelectorAll('.caps');
-  if (keyCL.classList.contains('active')) {
-    for (let i = 0; i < currentSpans.length; i += 1) {
-      currentSpans[i].classList.add('hidden');
+  if (countPressCL % 2 !== 0) {
+    keyCL.classList.add('active');
+    const hiddenSpans = document.querySelectorAll(`span.${curKeyClass}`);
+    const visibleSpans = document.querySelectorAll('.caps');
+
+    for (let i = 0; i < hiddenSpans.length; i += 1) {
+      hiddenSpans[i].classList.add('hidden');
     }
-    for (let i = 0; i < capsSpans.length; i += 1) {
-      capsSpans[i].classList.remove('hidden');
+    for (let i = 0; i < visibleSpans.length; i += 1) {
+      visibleSpans[i].classList.remove('hidden');
     }
+
     prevKeyClass = curKeyClass;
     curKeyClass = 'caps';
   } else {
-    for (let i = 0; i < currentSpans.length; i += 1) {
-      currentSpans[i].classList.remove('hidden');
+    keyCL.classList.remove('active');
+    const visibleClass = (curKeyClass === 'caps') ? prevKeyClass : curKeyClass;
+    const hiddenSpans = document.querySelectorAll('.caps');
+    const visibleSpans = document.querySelectorAll(`.${visibleClass}`);
+
+    for (let i = 0; i < hiddenSpans.length; i += 1) {
+      hiddenSpans[i].classList.add('hidden');
     }
-    for (let i = 0; i < capsSpans.length; i += 1) {
-      capsSpans[i].classList.add('hidden');
+    for (let i = 0; i < visibleSpans.length; i += 1) {
+      visibleSpans[i].classList.remove('hidden');
     }
-    curKeyClass = prevKeyClass;
-    prevKeyClass = 'caps';
+
+    if (curKeyClass === 'caps') {
+      curKeyClass = prevKeyClass;
+      prevKeyClass = 'caps';
+    }
   }
+}
+
+function changeCharactersByPressShift() {
+  const hiddenSpans = document.querySelectorAll(`span.${curKeyClass}`);
+  const visibleSpans = document.querySelectorAll('span.shiftCaps');
+
+  for (let i = 0; i < hiddenSpans.length; i += 1) {
+    hiddenSpans[i].classList.add('hidden');
+  }
+  for (let i = 0; i < visibleSpans.length; i += 1) {
+    const parentDiv = visibleSpans[i].parentElement.parentElement;
+    const parentClass = parentDiv.getAttribute('class').split(' ')[1];
+    if (!funcKeys.includes(parentClass)) {
+      visibleSpans[i].textContent = visibleSpans[i].textContent.toUpperCase();
+    }
+    visibleSpans[i].classList.remove('hidden');
+  }
+
+  prevKeyClass = curKeyClass;
+  curKeyClass = 'shiftCaps';
+}
+
+function changeCharactersByReleaseShift() {
+  const hiddenSpans = document.querySelectorAll('span.shiftCaps');
+  const visibleSpans = document.querySelectorAll(`span.${prevKeyClass}`);
+
+  for (let i = 0; i < hiddenSpans.length; i += 1) {
+    hiddenSpans[i].classList.add('hidden');
+  }
+  for (let i = 0; i < visibleSpans.length; i += 1) {
+    const parentDiv = visibleSpans[i].parentElement.parentElement;
+    const parentClass = parentDiv.getAttribute('class').split(' ')[1];
+    if (!funcKeys.includes(parentClass)) {
+      visibleSpans[i].textContent = visibleSpans[i].textContent.toLowerCase();
+    }
+    visibleSpans[i].classList.remove('hidden');
+  }
+
+  curKeyClass = prevKeyClass;
+  prevKeyClass = 'shiftCaps';
 }
 
 function prepareVirtualKeyboard() {
   const keyboard = document.querySelector('.keyboard');
+  const keyShiftLeft = document.querySelector('.ShiftLeft');
+  const keyShiftRight = document.querySelector('.ShiftRight');
+
   keyboard.addEventListener('click', (e) => {
     const target = e.target.closest('.key');
     if (!target) return undefined;
@@ -114,13 +169,18 @@ function prepareVirtualKeyboard() {
           break;
         case 'Tab': addTab();
           break;
-        case 'CapsLock': convertCharactersToUppercase();
+        case 'CapsLock': changeCharactersByPressCapsLock();
           break;
         default: return 0;
       }
     }
     return undefined;
   });
+
+  keyShiftLeft.addEventListener('mousedown', changeCharactersByPressShift);
+  keyShiftRight.addEventListener('mousedown', changeCharactersByPressShift);
+  keyShiftLeft.addEventListener('mouseup', changeCharactersByReleaseShift);
+  keyShiftRight.addEventListener('mouseup', changeCharactersByReleaseShift);
 }
 
 prepareVirtualKeyboard();
