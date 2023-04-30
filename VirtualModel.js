@@ -50,6 +50,8 @@ function runVirtualKeyboard() {
     const { value } = textarea;
     textarea.value = value.slice(0, cursorPos) + char + value.slice(cursorPos);
     cursorPos += 1;
+    textarea.selectionStart = cursorPos;
+    textarea.selectionEnd = textarea.selectionStart;
   }
 
   function removeCharBeforeCursor() {
@@ -57,17 +59,23 @@ function runVirtualKeyboard() {
     textarea.value = value.substring(0, cursorPos - 1) + value.substring(cursorPos);
     cursorPos -= 1;
     if (cursorPos < 0) { cursorPos = 0; }
+    textarea.selectionStart = cursorPos;
+    textarea.selectionEnd = textarea.selectionStart;
   }
 
   function removeCharAfterCursor() {
     const { value } = textarea;
     textarea.value = value.slice(0, cursorPos) + value.slice(cursorPos + 1);
+    textarea.selectionStart = cursorPos;
+    textarea.selectionEnd = textarea.selectionStart;
   }
   function moveLine() {
     const { value } = textarea;
     const n = '\n';
     textarea.value = value.slice(0, cursorPos) + n + value.slice(cursorPos);
     cursorPos += 1;
+    textarea.selectionStart = cursorPos;
+    textarea.selectionEnd = textarea.selectionStart;
   }
 
   function addTab() {
@@ -75,6 +83,8 @@ function runVirtualKeyboard() {
     const tab = '    ';
     textarea.value = value.slice(0, cursorPos) + tab + value.slice(cursorPos);
     cursorPos += 4;
+    textarea.selectionStart = cursorPos;
+    textarea.selectionEnd = textarea.selectionStart;
   }
 
   function changeCharactersByPressCapsLock() {
