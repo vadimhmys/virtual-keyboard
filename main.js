@@ -119,7 +119,11 @@ function changeCharactersByPressShift() {
     const parentDiv = visibleSpans[i].parentElement.parentElement;
     const parentClass = parentDiv.getAttribute('class').split(' ')[1];
     if (!funcKeys.includes(parentClass)) {
-      visibleSpans[i].textContent = visibleSpans[i].textContent.toUpperCase();
+      if (countPressCL % 2 !== 0) {
+        visibleSpans[i].textContent = visibleSpans[i].textContent.toLowerCase();
+      } else {
+        visibleSpans[i].textContent = visibleSpans[i].textContent.toUpperCase();
+      }
     }
     visibleSpans[i].classList.remove('hidden');
   }
@@ -139,7 +143,11 @@ function changeCharactersByReleaseShift() {
     const parentDiv = visibleSpans[i].parentElement.parentElement;
     const parentClass = parentDiv.getAttribute('class').split(' ')[1];
     if (!funcKeys.includes(parentClass)) {
-      visibleSpans[i].textContent = visibleSpans[i].textContent.toLowerCase();
+      if (countPressCL % 2 !== 0) {
+        visibleSpans[i].textContent = visibleSpans[i].textContent.toUpperCase();
+      } else {
+        visibleSpans[i].textContent = visibleSpans[i].textContent.toLowerCase();
+      }
     }
     visibleSpans[i].classList.remove('hidden');
   }
