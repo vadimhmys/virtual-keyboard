@@ -1,5 +1,5 @@
 /* eslint-disable import/extensions */
-import { init } from './Init.js';
+import { init, currentLanguage, currentKeyClass } from './Init.js';
 
 init();
 
@@ -11,6 +11,8 @@ const funcKeys = [
 let cursorPos = 0;
 const textarea = document.querySelector('textarea');
 let textareaFocusState = false;
+let curKeyClass = currentKeyClass;
+let prevKeyClass;
 
 textarea.addEventListener('click', () => {
   setTimeout(() => {
@@ -35,7 +37,7 @@ document.addEventListener('click', (e) => {
 });
 
 function printChar(targetClass) {
-  const key = document.querySelector(`.${targetClass}`);
+  const key = document.querySelector(`.${targetClass} span.${currentLanguage} span.${curKeyClass}`);
   const char = key.textContent;
   const { value } = textarea;
   textarea.value = value.slice(0, cursorPos) + char + value.slice(cursorPos);
@@ -68,6 +70,32 @@ function addTab() {
   cursorPos += 4;
 }
 
+function convertCharactersToUppercase() {
+  const keyCL = document.querySelector('.CapsLock');
+  keyCL.classList.toggle('active');
+  const currentSpans = document.querySelectorAll(`span.${currentKeyClass}`);
+  const capsSpans = document.querySelectorAll('.caps');
+  if (keyCL.classList.contains('active')) {
+    for (let i = 0; i < currentSpans.length; i += 1) {
+      currentSpans[i].classList.add('hidden');
+    }
+    for (let i = 0; i < capsSpans.length; i += 1) {
+      capsSpans[i].classList.remove('hidden');
+    }
+    prevKeyClass = curKeyClass;
+    curKeyClass = 'caps';
+  } else {
+    for (let i = 0; i < currentSpans.length; i += 1) {
+      currentSpans[i].classList.remove('hidden');
+    }
+    for (let i = 0; i < capsSpans.length; i += 1) {
+      capsSpans[i].classList.add('hidden');
+    }
+    curKeyClass = prevKeyClass;
+    prevKeyClass = 'caps';
+  }
+}
+
 function prepareVirtualKeyboard() {
   const keyboard = document.querySelector('.keyboard');
   keyboard.addEventListener('click', (e) => {
@@ -85,6 +113,8 @@ function prepareVirtualKeyboard() {
         case 'Enter': moveLine();
           break;
         case 'Tab': addTab();
+          break;
+        case 'CapsLock': convertCharactersToUppercase();
           break;
         default: return 0;
       }
