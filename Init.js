@@ -159,7 +159,7 @@ export function renderKeys(language, classOfSpan) {
 }
 
 function showKeys() {
-  const visibleKeys = document.querySelectorAll(`span.${currentLanguage} > span.${currentKeyClass}`);
+  const visibleKeys = document.querySelectorAll(`span.${currentKeyClass}`);
   for (let i = 0; i < visibleKeys.length; i += 1) {
     visibleKeys[i].classList.remove('hidden');
   }
