@@ -193,5 +193,5 @@ export function init() {
   renderKeys('rus', 'shiftCaps');
   showKeys();
   renderDescription('Клавиатура создана в операционной системе Windows');
-  renderLanguageSwitchInstructions('Для переключения языка комбинация: левые Shift + Alt');
+  renderLanguageSwitchInstructions('Для переключения языка комбинация: левые Ctrl + Alt');
 }

@@ -1,5 +1,8 @@
 /* eslint-disable import/extensions */
-import { arrayOfAllCodes } from './Init.js';
+import { arrayOfAllCodes, currentLanguage } from './Init.js';
+
+let activeLanguage = currentLanguage;
+let inactiveLanguage = (activeLanguage === 'eng') ? 'rus' : 'eng';
 
 function runPhysicalKeyboard() {
   document.addEventListener('keydown', (e) => {
@@ -18,6 +21,48 @@ function runPhysicalKeyboard() {
       key.dispatchEvent(generatedEvent);
     }
   });
+
+  function changeLanguage() {
+    const hiddenSpans = document.getElementsByClassName(`${activeLanguage}`);
+    const visibleSpans = document.getElementsByClassName(`${inactiveLanguage}`);
+
+    for (let i = 0; i < hiddenSpans.length; i += 1) {
+      hiddenSpans[i].classList.add('hidden');
+    }
+    for (let i = 0; i < visibleSpans.length; i += 1) {
+      visibleSpans[i].classList.remove('hidden');
+    }
+
+    const language = activeLanguage;
+    activeLanguage = inactiveLanguage;
+    inactiveLanguage = language;
+  }
+
+  function runOnKeys(func, ...codes) {
+    const pressed = new Set();
+
+    document.addEventListener('keydown', (event) => {
+      pressed.add(event.code);
+
+      for (let i = 0; i < codes.length; i += 1) {
+        if (!pressed.has(codes[i])) {
+          return;
+        }
+      }
+      pressed.clear();
+      func();
+    });
+
+    document.addEventListener('keyup', (event) => {
+      pressed.delete(event.code);
+    });
+  }
+
+  runOnKeys(
+    changeLanguage,
+    'ControlLeft',
+    'AltLeft',
+  );
 }
 
 export default runPhysicalKeyboard;
