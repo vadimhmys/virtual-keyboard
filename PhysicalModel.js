@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 import { arrayOfAllCodes, currentLanguage } from './Init.js';
 
-let activeLanguage = currentLanguage;
+let activeLanguage = localStorage.getItem('activeLang') || currentLanguage;
 let inactiveLanguage = (activeLanguage === 'eng') ? 'rus' : 'eng';
 
 function runPhysicalKeyboard() {
@@ -36,6 +36,7 @@ function runPhysicalKeyboard() {
     const language = activeLanguage;
     activeLanguage = inactiveLanguage;
     inactiveLanguage = language;
+    localStorage.setItem('activeLang', `${activeLanguage}`);
   }
 
   function runOnKeys(func, ...codes) {

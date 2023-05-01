@@ -108,7 +108,6 @@ function renderKeyboard() {
 
       const rusSpan = document.createElement('span');
       rusSpan.classList.add('rus');
-      rusSpan.classList.add('hidden');
 
       const caseDownSpan = document.createElement('span');
       caseDownSpan.classList.add('caseDown');
@@ -138,6 +137,16 @@ function renderKeyboard() {
       engSpan.append(caseUpSpan.cloneNode());
       engSpan.append(capsSpan.cloneNode());
       engSpan.append(shiftCapsSpan.cloneNode());
+
+      if (localStorage.getItem('activeLang')) {
+        if (localStorage.getItem('activeLang') === 'eng') {
+          rusSpan.classList.add('hidden');
+        } else {
+          engSpan.classList.add('hidden');
+        }
+      } else {
+        rusSpan.classList.add('hidden');
+      }
 
       div.append(rusSpan);
       div.append(engSpan);
