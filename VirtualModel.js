@@ -45,7 +45,7 @@ function runVirtualKeyboard() {
 
   function printChar(targetClass) {
     highlightPressedKey(targetClass);
-    const key = document.querySelector(`.${targetClass} span.${currentLanguage} span.${curKeyClass}`);
+    const key = document.querySelector(`.${targetClass} span.${localStorage.getItem('activeLang') || currentLanguage} span.${curKeyClass}`);
     const char = key.textContent;
     const { value } = textarea;
     textarea.value = value.slice(0, cursorPos) + char + value.slice(cursorPos);
